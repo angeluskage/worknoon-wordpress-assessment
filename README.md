@@ -30,7 +30,7 @@ The founder name used in the Person schema is a placeholder due to limited publi
 ## Setup Instructions
 
 ### Prerequisites
-- WordPress 6.x installed
+- WordPress 6.9.4 installed
 - PHP 8.1 or higher
 - MySQL 8.0 or higher
 - A server or hosting environment (the live demo runs on `assessment.liald.com`)
