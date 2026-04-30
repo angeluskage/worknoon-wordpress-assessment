@@ -23,6 +23,8 @@ This repository is the complete submission for the Worknoon WordPress Developer 
 
 The live WordPress environment was built on a dedicated subdomain (`assessment.liald.com`) using Elementor as the page builder, with full attention to mobile responsiveness, page speed, and clean code structure.
 
+The founder name used in the Person schema is a placeholder due to limited publicly available data. In a real implementation, this would be replaced with verified entity data to maintain accuracy and trust signals.
+
 ---
 
 ## Setup Instructions
@@ -36,7 +38,7 @@ The live WordPress environment was built on a dedicated subdomain (`assessment.l
 ### To run the WordPress project locally:
 1. Clone this repository:
    ```bash
-   git clone https://github.com/[your-username]/worknoon-wordpress-assessment.git
+   git clone https://github.com/angeluskage/worknoon-wordpress-assessment.git
    ```
 2. Import the WordPress export file (`wordpress-export/worknoon-assessment.xml`) using **Tools → Import → WordPress** inside your local WordPress admin.
 3. Install the required plugins (listed below under Tools & Technologies).
