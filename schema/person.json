@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://worknoon.com/#founder",
+  "name": "Kufre-Abasi Essien [Placeholder]",
+  "url": "https://worknoon.com/about",
+  "jobTitle": "Founder & CEO",
+  "worksFor": {
+    "@type": "Organization",
+    "@id": "https://worknoon.com/#organization",
+    "name": "Worknoon"
+  },
+  "description": "Founder and CEO of Worknoon, a platform dedicated to connecting businesses with skilled remote professionals across Africa and beyond.",
+  "sameAs": [
+    "https://www.linkedin.com/in/worknoon-founder",
+    "https://twitter.com/worknoon"
+  ],
+  "knowsAbout": [
+    "Remote Work",
+    "Talent Acquisition",
+    "Workforce Management",
+    "Digital Platforms",
+    "Business Development"
+  ]
+}
