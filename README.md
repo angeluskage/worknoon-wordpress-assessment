@@ -57,7 +57,7 @@ The JSON-LD schema files in `/schema/` are standalone and can be validated direc
 ### Core Platform
 | Tool | Purpose |
 |---|---|
-| WordPress 6.9 | CMS and page management foundation |
+| WordPress 6.9.4 | CMS and page management foundation |
 | Elementor Pro | Visual page builder with advanced widgets and Pro features |
 | Elementor Hello Theme | Lightweight, Elementor-native base theme with zero default styling |
 
