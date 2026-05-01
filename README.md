@@ -30,7 +30,7 @@ The founder name used in the Person schema is a placeholder due to limited publi
 ## Setup Instructions
 
 ### Prerequisites
-- WordPress 6.9.4 installed
+- WordPress 6.x installed
 - PHP 8.1 or higher
 - MySQL 8.0 or higher
 - A server or hosting environment (the live demo runs on `assessment.liald.com`)
@@ -38,7 +38,7 @@ The founder name used in the Person schema is a placeholder due to limited publi
 ### To run the WordPress project locally:
 1. Clone this repository:
    ```bash
-   git clone https://github.com/angeluskage/worknoon-wordpress-assessment.git
+   git clone https://github.com/[your-username]/worknoon-wordpress-assessment.git
    ```
 2. Import the WordPress export file (`wordpress-export/worknoon-assessment.xml`) using **Tools → Import → WordPress** inside your local WordPress admin.
 3. Install the required plugins (listed below under Tools & Technologies).
@@ -57,20 +57,27 @@ The JSON-LD schema files in `/schema/` are standalone and can be validated direc
 ### Core Platform
 | Tool | Purpose |
 |---|---|
-| WordPress 6.x | CMS and page management foundation |
-| Elementor (Free) | Page builder for landing page construction |
-| Elementor Hello Theme | Lightweight, Elementor-native base theme |
+| WordPress 6.9 | CMS and page management foundation |
+| Elementor Pro | Visual page builder with advanced widgets and Pro features |
+| Elementor Hello Theme | Lightweight, Elementor-native base theme with zero default styling |
 
 ### Plugins
 | Plugin | Purpose |
 |---|---|
-| Elementor | Visual page builder |
-| WPForms Lite | Contact form with anti-spam, validation |
-| Yoast SEO | Meta tags, XML sitemap, canonical control |
-| WP Rocket (or LiteSpeed Cache) | Page caching, asset optimization |
-| Imagify | Image compression & WebP conversion |
-| Google Site Kit | Google Analytics 4 integration |
-| Insert Headers and Footers (WPCode) | Injecting JSON-LD schema markup sitewide |
+| Elementor Pro | Visual drag-and-drop page builder |
+| PRO Elements | Extended Elementor widget library |
+| The Pack | Additional Elementor elements and templates |
+| Marquee Addons for Elementor | Marquee/ticker animations (used in scrolling tag strip) |
+| Contact Form 7 | Contact form with GoSMTP-powered email delivery |
+| GoSMTP | Reliable SMTP email delivery for form submissions |
+| Rank Math SEO PRO | Meta tags, XML sitemap, canonical control, and built-in Schema Generator |
+| WP Rocket | Page caching, CSS/JS minification, lazy loading, asset optimization |
+| ShortPixel Image Optimizer | Automatic image compression and WebP conversion |
+| Site Kit by Google | Google Analytics 4 integration and Search Console connection |
+| Icon Element | Extended icon library for Elementor |
+| Backuply | Automated WordPress backups |
+| CookieAdmin | GDPR/cookie consent banner |
+| Loginizer Security | Brute-force login protection |
 
 ### SEO & Schema Tools
 | Tool | Purpose |
@@ -125,7 +132,7 @@ This pattern allows Google's crawler to merge references to the same entity acro
 The `sameAs` property is the most important property for Knowledge Graph entity building. It tells Google: "This entity is also described at these other trusted URLs." When Google cross-references Worknoon's own schema with matching data on LinkedIn, Crunchbase, and Twitter, it significantly increases confidence in the entity's identity and triggers Knowledge Panel eligibility.
 
 ### Schema Deployment Method
-The JSON-LD schemas are deployed using **WPCode (Insert Headers and Footers)** — injected globally in the `<head>` for the Organization and WebSite schemas, and on a per-page basis for the Person schema on the About page. This avoids touching theme files directly, keeping the implementation upgrade-safe.
+The JSON-LD schemas are deployed via **Rank Math SEO PRO's built-in Schema Generator** — a more robust and deeply integrated approach than a standalone injection plugin. Rank Math outputs schema directly in the `<head>` of each page as valid JSON-LD, handles entity relationships, and validates against Schema.org without requiring manual `<script>` tag management. The hand-authored schema files in `/schema/` represent the canonical data model and were used to configure Rank Math's schema fields accurately. This approach keeps schema tightly coupled with SEO metadata, ensuring canonical URLs and schema `@id` anchors stay in sync automatically.
 
 ---
 
@@ -136,31 +143,30 @@ The WordPress system is built around a principle of **separation of concerns**: 
 ```
 [User Browser]
       ↓
-[Cloudflare CDN / Edge Cache]
-      ↓
 [Web Server — Apache/Nginx]
       ↓
 [WP Rocket Page Cache] ← Serves static HTML if cache hit
       ↓ (cache miss)
-[WordPress Core + PHP]
-      ├── Hello Theme (structure)
-      ├── Elementor (layout rendering)
-      ├── Yoast SEO (meta, canonical, sitemap)
-      ├── WPForms (contact form processing)
-      ├── WPCode (schema injection)
-      └── Google Site Kit (Analytics)
+[WordPress Core + PHP 8.x]
+      ├── Hello Theme (structure — zero default CSS)
+      ├── Elementor Pro (layout rendering)
+      ├── PRO Elements + The Pack (extended widgets)
+      ├── Rank Math SEO PRO (meta, canonical, sitemap, schema)
+      ├── Contact Form 7 + GoSMTP (form capture & delivery)
+      ├── ShortPixel (image optimization + WebP)
+      └── Site Kit by Google (Analytics 4)
       ↓
 [MySQL Database]
 ```
 
 ### Page Speed Architecture
-- WP Rocket handles server-side caching, CSS/JS minification, lazy loading, and database optimization
-- Imagify compresses all images on upload and serves WebP versions to supporting browsers
-- The Hello Theme was chosen specifically because it outputs minimal CSS — no bloated default styles to override
-- Elementor's DOM output is kept clean by limiting widget nesting depth and avoiding unnecessary inner sections
+- WP Rocket handles server-side caching, CSS/JS minification, lazy loading, and database cleanup
+- ShortPixel compresses all images on upload and auto-serves WebP to supporting browsers — zero manual intervention required
+- The Hello Theme outputs zero default CSS — every rendered style is intentional Elementor output
+- Elementor's Flexbox Container model (not legacy Section/Column) was used throughout, producing significantly leaner DOM output
 
 ### Analytics Architecture
-Google Analytics 4 is integrated via Google Site Kit, which authenticates directly with the Google account, eliminates the need to manually manage tracking code, and surfaces GA4 data inside the WordPress admin dashboard. This reduces the surface area for tracking errors and keeps the measurement setup auditable.
+Google Analytics 4 is integrated via Site Kit by Google, which authenticates directly with the Google account, surfaces GA4 metrics inside the WordPress dashboard, and handles tag injection without manual code edits. GoSMTP ensures contact form submissions reach the inbox reliably by routing through a configured SMTP provider rather than PHP's `mail()` function.
 
 ---
 
@@ -179,11 +185,11 @@ I structured the work in two parallel tracks:
 
 ### Key Decisions and Why
 
-**Using Elementor Hello Theme instead of Astra or GeneratePress:** Most assessments default to Astra. I chose Hello because it is Elementor's own purpose-built theme — it outputs zero styling of its own, so every design element is intentional and controllable. The result is a smaller CSS footprint and faster LCP.
+**Rank Math SEO PRO over Yoast SEO:** Rank Math PRO offers a built-in Schema Generator that is significantly more capable than Yoast's schema output — it supports custom schema types, entity linking, and direct JSON-LD editing without a third plugin. It also provides deeper integration with Google Search Console via Site Kit, and its interface is more developer-friendly for custom configurations.
 
-**WPForms over Contact Form 7:** Contact Form 7 requires manual integration for analytics tracking (form submission events). WPForms has native GA4 event firing and a cleaner admin UX. For a client project, this means less post-deployment maintenance.
+**Contact Form 7 with GoSMTP over WPForms:** CF7 is intentionally minimal — it outputs clean, lightweight markup and does exactly one job well. Rather than a heavier form plugin that bundles analytics and CRM features, I paired CF7 with GoSMTP to handle reliable email delivery via SMTP. This separation of concerns keeps the form layer lean while solving the real-world problem of WordPress `mail()` deliverability failures.
 
-**WPCode for schema injection:** Rather than hardcoding JSON-LD into the theme's `functions.php` or `header.php`, I used WPCode (formerly Insert Headers and Footers). This keeps schema decoupled from the theme, so it survives theme updates and can be toggled per-page without touching code.
+**ShortPixel over Imagify:** ShortPixel supports a wider range of compression modes (Lossy, Glossy, Lossless) and handles WebP conversion with better backward compatibility. It also integrates cleanly with Elementor's media library without requiring manual reprocessing on theme switch.
 
 **JSON-LD over plugin-generated schema:** Plugins like Yoast generate schema automatically, but the output can be generic or misconfigured. Hand-authoring the JSON-LD gives precise control over `@id` anchors, `sameAs` arrays, and entity relationships — which matters significantly for Knowledge Graph signals.
 
@@ -197,8 +203,8 @@ I structured the work in two parallel tracks:
 
 ### Challenges and Resolutions
 
-**Challenge 1: Schema deployment without theme file access**
-I didn't want to edit theme files directly since the Hello Theme could be updated and overwrite changes. Resolution: WPCode plugin, injecting JSON-LD in the `<head>` without touching any theme file.
+**Challenge 1: Schema deployment without polluting theme files**
+I needed to inject Organization and Person schema sitewide without editing `functions.php` or any theme file directly. Resolution: Rank Math SEO PRO's Schema Generator handles this natively — I configured the Organization schema via Rank Math's Local SEO and Schema settings, which outputs valid JSON-LD in the `<head>` on every page. The hand-authored `/schema/` files in this repo served as the data source and reference for configuring Rank Math's fields accurately.
 
 **Challenge 2: Elementor's generated markup and Core Web Vitals**
 Elementor adds wrapper divs and inline styles that can hurt CLS (Cumulative Layout Shift). Resolution: I used the Flexbox Container feature (Elementor's newer, leaner container model) instead of the legacy Section/Column model, which produces significantly less DOM overhead.
