@@ -132,7 +132,7 @@ This pattern allows Google's crawler to merge references to the same entity acro
 The `sameAs` property is the most important property for Knowledge Graph entity building. It tells Google: "This entity is also described at these other trusted URLs." When Google cross-references Worknoon's own schema with matching data on LinkedIn, Crunchbase, and Twitter, it significantly increases confidence in the entity's identity and triggers Knowledge Panel eligibility.
 
 ### Schema Deployment Method
-The JSON-LD schemas are deployed via **Rank Math SEO PRO's built-in Schema Generator** — a more robust and deeply integrated approach than a standalone injection plugin. Rank Math outputs schema directly in the `<head>` of each page as valid JSON-LD, handles entity relationships, and validates against Schema.org without requiring manual `<script>` tag management. The hand-authored schema files in `/schema/` represent the canonical data model and were used to configure Rank Math's schema fields accurately. This approach keeps schema tightly coupled with SEO metadata, ensuring canonical URLs and schema `@id` anchors stay in sync automatically.
+The JSON-LD schemas are deployed via a direct `wp_head` hook in the Hello Theme's `functions.php`. The hand-authored Organization and Person schema from `/schema/` were registered using `add_action('wp_head', ...)` with high priority, ensuring they output in the `<head>` on every page load. This approach was chosen after encountering configuration conflicts with Rank Math PRO's Schema Generator — injecting via `functions.php` gives deterministic, plugin-independent output. The implementation was validated using Google's Rich Results Test, which confirmed **2 valid schema items detected** (Organisation + Article) with no critical errors on the live URL.
 
 ---
 
@@ -203,8 +203,8 @@ I structured the work in two parallel tracks:
 
 ### Challenges and Resolutions
 
-**Challenge 1: Schema deployment without polluting theme files**
-I needed to inject Organization and Person schema sitewide without editing `functions.php` or any theme file directly. Resolution: Rank Math SEO PRO's Schema Generator handles this natively — I configured the Organization schema via Rank Math's Local SEO and Schema settings, which outputs valid JSON-LD in the `<head>` on every page. The hand-authored `/schema/` files in this repo served as the data source and reference for configuring Rank Math's fields accurately.
+**Challenge 1: Schema deployment — Rank Math configuration conflict**
+Rank Math PRO's Schema Generator presented configuration conflicts that were producing inconsistent output. Rather than spending time debugging a third-party plugin's schema settings under time pressure, I injected the schema directly via `add_action('wp_head', ...)` in `functions.php`. This gave immediate, deterministic control over the exact JSON-LD output. The result was validated with Google's Rich Results Test — 2 valid items detected, Organisation schema clean, zero critical errors.
 
 **Challenge 2: Elementor's generated markup and Core Web Vitals**
 Elementor adds wrapper divs and inline styles that can hurt CLS (Cumulative Layout Shift). Resolution: I used the Flexbox Container feature (Elementor's newer, leaner container model) instead of the legacy Section/Column model, which produces significantly less DOM overhead.
