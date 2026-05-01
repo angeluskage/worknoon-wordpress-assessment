@@ -38,7 +38,7 @@ The founder name used in the Person schema is a placeholder due to limited publi
 ### To run the WordPress project locally:
 1. Clone this repository:
    ```bash
-   git clone https://github.com/[your-username]/worknoon-wordpress-assessment.git
+   git clone https://github.com/angeluskage/worknoon-wordpress-assessment.git
    ```
 2. Import the WordPress export file (`wordpress-export/worknoon-assessment.xml`) using **Tools → Import → WordPress** inside your local WordPress admin.
 3. Install the required plugins (listed below under Tools & Technologies).
